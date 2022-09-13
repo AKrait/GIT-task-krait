@@ -10,6 +10,7 @@
 // @icon         
 // @grant        none
 // ==/UserScript==
+
 let links = document.links; 
 let btnK = document.querySelectorAll('[type="submit"]')[0];
 let searchInput = document.getElementsByName('query')[0];
