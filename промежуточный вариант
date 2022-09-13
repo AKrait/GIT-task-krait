@@ -1,51 +1,62 @@
 // ==UserScript==
-// @name         GoogleBot
+// @name         rambler
 // @namespace    http://tampermonkey.net/
 // @version      0.1
 // @description  try to take over the world!
 // @author       Aleksandra Krait
-// @match        https://ru.search.yahoo.com*
-
-// @icon
+// @match        https://r0.ru/*
+// @match        https://nova.rambler.ru/*
+// @match        https://4brain.ru/*
+// @icon         
 // @grant        none
 // ==/UserScript==
+let links = document.links; 
+let btnK = document.querySelectorAll('[type="submit"]')[0];
+let searchInput = document.getElementsByName('query')[0];
+let keywords = ['Персональная постановка целей','10 шагов для достижения целей','Планирование недели','Как планирование изменит вашу жизнь','Искусство расставлять приоритеты','Тайм-менеджмент: управление временем'];
+let keyword = keywords[getRandom(0, keywords.length)]; 
+// let keyword = 'always rounds up and returns';
+let menu = document.querySelector('.Menu__filter-controller__new_closed--149vp Menu__filter-controller__new--o5XEp Menu__filter-controller--3oJA9');
 
-let links = document.links; // полный список ссылок на странице
-let searchInput = document.getElementsByName("p")[0];
-let btnK = document.querySelectorAll('[type="submit"]')[0]; //вызов кнопки по идентификатору массива
-let keywords = ['Персональная постановка целей',
-                '10 шагов для достижения целей',
-                'Планирование недели',
-                'Как планирование изменит вашу жизнь',
-                'Искусство расставлять приоритеты',
-                'Тайм-менеджмент: управление временем']// ключевые слова для поиска
-let keyword = keywords[getRandom(0, keywords.length)]; // достаем из массива рандомную фразу
-let reset = document.querySelector('sprite')
-
-if (btnK !== undefined) { // если кнопка поиска на странице определена
+if (btnK !== undefined) {
   let i = 0;
-  let timerId = setInterval(()=>{
-    searchInput.value += keyword[i]; //то в строку поиска вносится рандомная фраза из массива
-    i++; // по одному символу
-    if (i == keyword.length) { // если ш достигла длинны выбранной фразы
-      clearInterval(timerId); // станавливаем цикл
-      setTimeout(()=>{ // позволяет вызвать фунцию 1 раз через какой то промежуток времени (()=>{}) стрелочная функия
-        btnK.click(); //клик
-      }, getRandom(200, 500)); //интервал вот 200 до 500 милисекунд
+  let timerId = setInterval(function() {
+    searchInput.value += keyword[i];
+    i++;
+    if (i == keyword.length) {
+      clearInterval(timerId);
+      setTimeout(() =>{
+        btnK.click();
+      }, getRandom(1000, 2500));
     }
   }, 100);
-} if (reset !== undefined){
-  for (let i=0; i<links.length; i++) { // запускается цикл поиска
-    if (links[i].class.in(' d-ib ls-05 fz-20 lh-26 td-hu tc va-bot mxw-100p')) { // из полного списка ссылкок страницы находим указанную
-      console.log("нашел строку" + links[i]); // выводим в консоль найденную ссылку
-      let link = links[i]; // присваиваем ссылке переменную
-      setTimeout(()=>{ // позволяет вызвать фунцию 1 раз через какой то промежуток времени (()=>{}) стрелочная функия
-        link.click(); // кликаем на эту переменную
-      }, getRandom(3500, 4500)); //интервал вот 200 до 500 милисекун
-      break; // завершаем цикл
+} else if (location.hostname == '4brain.ru') {
+  console.log("Мы на сайте");
+  setTimeout(() =>{
+  links[getRandom(0, links.length)].click()
+  }, getRandom(2000, 3500));
+}
+if (menu == null){
+  let nextRamblerPage = true;
+  for (let i=0; i<links.length; i++) {
+    if (links[i].href.indexOf('4brain.ru') !== -1) {
+      console.log("нашел строку" + links[i]);
+      let link = links[i];
+      setTimeout(() =>{
+        link.click();
+      }, getRandom(1000, 2500));
+      break;
     }
   }
+  if (nextRamblerPage) {
+    setTimeout(()=>{
+      document.getElementsByClassName("PagingNew__paging__link_next--116P_ PagingNew__paging__link--Jg5ea")[0].click();
+    }, getRandom(3000, 5000));
+  }
+  if(document.getElementsByClassName('PagingNew__paging__link_current--1aT3C PagingNew__paging__link--Jg5ea')[0].innerText == "4") {
+    let nextRamblerPage = false;
+    location.href = "https://www.google.com/"
+  }
 }
-function getRandom(min,max) { // случайным образом выдает
-  return Math.floor(Math.random()*(max - min) + min);// округляем в меньшую сторону(рандомное значение
-}
+function getRandom(min, max) {
+  return Math.floor(Math.random() * (max - min) + min);}
