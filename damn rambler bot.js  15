@@ -36,9 +36,8 @@ if (btnK !== undefined) {
       let index = getRandom(0, links.length)
       if(getRandom(0, 101)>70) {
         location.href = "https://r0.ru/";
-      }
-      if(links[index].href.indexOf('4brain.ru') != -1) {
-        links[index].click();
+      } else if (links[index].href.indexOf(site) !== -1) {
+      links[index].click();
         }
        }, getRandom(4000, 5500));
 }
