@@ -1,0 +1,97 @@
+<?php
+class Person
+{
+  private $name;
+  private $lastname;
+  private $age;
+  private $hp;
+  private $mother;
+  private $father;
+
+  function __construct(
+    $name,
+    $lastname,
+    $age,
+    $mother = null,
+    $father = null
+  ) {
+    $this->name = $name;
+    $this->lastname = $lastname;
+    $this->age = $age;
+    $this->mother = $mother;
+    $this->father = $father;
+    $this->hp = 100;
+  }
+  function sayHi($name)
+  {
+    return "Hi, $name, I'm " . $this->name;
+  }
+  function setHp($hp)
+  {
+    if ($this->hp + $hp >= 100) $this->hp = 100;
+    else $this->hp = $this->hp + $hp;
+  }
+  function getHp()
+  {
+    return $this->hp;
+  }
+  function getAge()
+  {
+    return $this->age;
+  }
+  function getName()
+  {
+    return $this->name;
+  }
+  function getLastname()
+  {
+    return $this->lastname;
+  }
+  function getMother()
+  {
+    return $this->mother;
+  }
+  function getFather()
+  {
+    return $this->father;
+  }
+  function getMomsMom()
+  {
+    return $this->getMother()->mother;
+  }
+  function getMomsDad()
+  {
+    return $this->getMother()->father;
+  }
+  function getDadsMom()
+  {
+    return $this->getFather()->mother;
+  }
+  function getDadsDad()
+  {
+    return $this->getFather()->father;
+  }
+  function getInfo()
+  {
+    return "<h3>Несколько слов о себе и моей семье:</h3><br>" .
+      "Меня зовут " . $this->getName() . " " . $this->getLastname() .
+      ". Мне " . $this->getAge() . " лет." .
+      "<br>Мою маму зовут " . $this->getMother()->getName() . " " . $this->getMother()->getLastname() .
+      " , а моего папу " . $this->getFather()->getName() . " " . $this->getLastname() . "." .
+      "<br>Mои бабушки " . $this->getMomsMom()->getName() . " " . $this->getMomsMom()->getLastname() .
+      " и "  . $this->getDadsMom()->getName() . " " . $this->getDadsMom()->getLastname() .
+      " , а дедушки " . $this->getMomsDad()->getName() . " " . $this->getMomsDad()->getLastname() .
+      " и "  . $this->getDadsDad()->getName() . " " . $this->getDadsDad()->getLastname() . ". <br>И я афигеть как нервничаю, потому что вообще не представляю как писать диплом";
+  }
+}
+
+$tolya = new Person("Анатолий", "Иванов", 82, null, null);
+$kolya = new Person("Николай", "Петров", 68, null, null);
+$zoya = new Person("Зоя", "Настоящева", 68, null, null);
+$lida = new Person("Лидия", "Петрова", 75, null, null);
+
+$alex = new Person("Алексей", "Иванов", 38, $zoya, $tolya);
+$kate = new Person("Екатерина", "Иванова", 35, $lida, $kolya);
+$valera = new Person("Валера", "Иванов", 15, $kate, $alex);
+
+echo $valera->getInfo();
